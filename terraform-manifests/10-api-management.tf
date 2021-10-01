@@ -2,15 +2,20 @@
 # Create Api Management
 
 resource "azurerm_api_management" "apim_service1" {
-  name                 = "${var.environment}-apim-service"
-  location             = azurerm_resource_group.infra-rg.location
-  resource_group_name  = azurerm_resource_group.infra-rg.name
-  publisher_name       = "Example Publisher"
-  publisher_email      = "publisher@example.com"
-  sku_name             = "Developer_1"
+  name                = "${var.environment}-apim-service"
+  location            = azurerm_resource_group.infra-rg.location
+  resource_group_name = azurerm_resource_group.infra-rg.name
+  publisher_name      = "Example Publisher"
+  publisher_email     = "publisher@example.com"
+  sku_name            = "Developer_1"
+
   virtual_network_type = "Internal"
   virtual_network_configuration {
     subnet_id = azurerm_subnet.apim-default.id
+  }
+
+  identity {
+    type = "SystemAssigned"
   }
 
   tags = {

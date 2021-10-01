@@ -56,6 +56,20 @@ resource "azurerm_key_vault" "infra_keyvault" {
   }
 }
 
+resource "azurerm_key_vault_access_policy" "key_vault_access_policy" {
+  key_vault_id = azurerm_key_vault.infra_keyvault.id
+  tenant_id    = azurerm_api_management.apim_service1.identity.0.tenant_id
+  object_id    = azurerm_api_management.apim_service1.identity.0.principal_id
+
+  key_permissions = [
+    "get",
+  ]
+
+  secret_permissions = [
+    "get",
+  ]
+}
+
 resource "azurerm_key_vault_certificate" "gatewayCert" {
   name         = "gatewayCert-cert"
   key_vault_id = azurerm_key_vault.infra_keyvault.id
@@ -82,3 +96,4 @@ resource "azurerm_key_vault_certificate" "gatewayCert" {
     }
   }
 }
+
