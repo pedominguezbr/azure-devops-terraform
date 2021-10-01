@@ -17,6 +17,9 @@ resource "azurerm_key_vault" "infra_keyvault" {
       "getissuers",
       "import",
       "list",
+      "purge",
+      "recover",
+      "restore",
       "listissuers",
       "managecontacts",
       "manageissuers",
@@ -52,24 +55,13 @@ resource "azurerm_key_vault" "infra_keyvault" {
       "recover",
       "restore",
       "set",
+      "Purge",
     ]
   }
 }
 
-resource "azurerm_key_vault_access_policy" "key_vault_access_policy" {
-  key_vault_id = azurerm_key_vault.infra_keyvault.id
-  tenant_id    = azurerm_api_management.apim_service1.identity.0.tenant_id
-  object_id    = azurerm_api_management.apim_service1.identity.0.principal_id
-
-  key_permissions = [
-    "get",
-  ]
-
-  secret_permissions = [
-    "get",
-  ]
-}
-
+/*
+#Cargar Certificado tipo PFX
 resource "azurerm_key_vault_certificate" "gatewayCert" {
   name         = "gatewayCert-cert"
   key_vault_id = azurerm_key_vault.infra_keyvault.id
@@ -97,3 +89,59 @@ resource "azurerm_key_vault_certificate" "gatewayCert" {
   }
 }
 
+*/
+#Create Certificate Seft Script - Autofirmado
+resource "azurerm_key_vault_certificate" "gatewayCertSelf" {
+  name         = "gatewayCert-Self"
+  key_vault_id = azurerm_key_vault.infra_keyvault.id
+
+  certificate_policy {
+    issuer_parameters {
+      name = "Self"
+    }
+
+    key_properties {
+      exportable = true
+      key_size   = 2048
+      key_type   = "RSA"
+      reuse_key  = true
+    }
+
+    lifetime_action {
+      action {
+        action_type = "AutoRenew"
+      }
+
+      trigger {
+        days_before_expiry = 30
+      }
+    }
+
+    secret_properties {
+      content_type = "application/x-pkcs12"
+    }
+
+    x509_certificate_properties {
+      key_usage = [
+        "cRLSign",
+        "dataEncipherment",
+        "digitalSignature",
+        "keyAgreement",
+        "keyCertSign",
+        "keyEncipherment",
+      ]
+
+      subject            = "CN=api.pdominguez.com"
+      validity_in_months = 12
+
+      subject_alternative_names {
+        dns_names = [
+          "api.pdominguez.com",
+          "portal.pdominguez.com",
+          "devmanagement.pdominguez.com",
+          "rancher.pdominguez.com",
+        ]
+      }
+    }
+  }
+}

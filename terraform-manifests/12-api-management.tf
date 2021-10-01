@@ -34,21 +34,54 @@ XML
   }
 }
 
+resource "azurerm_key_vault_access_policy" "key_vault_access_policy" {
+  key_vault_id = azurerm_key_vault.infra_keyvault.id
+  tenant_id    = azurerm_api_management.apim_service1.identity.0.tenant_id
+  object_id    = azurerm_api_management.apim_service1.identity.0.principal_id
+
+  certificate_permissions = [
+    "get",
+    "list",
+  ]
+  key_permissions = [
+    "get",
+    "list",
+  ]
+
+  secret_permissions = [
+    "get",
+    "list",
+  ]
+}
+
+/*
+#Se genera el certificado en el mismo APIM
+resource "azurerm_api_management_certificate" "apimcertificate" {
+  name                = "apimcertificate-cert"
+  api_management_name = azurerm_api_management.apim_service1.name
+  resource_group_name = azurerm_resource_group.infra-rg.name
+
+  key_vault_secret_id = azurerm_key_vault_certificate.gatewayCert.secret_id
+}
+
+*/
+
 resource "azurerm_api_management_custom_domain" "customdomain" {
   api_management_id = azurerm_api_management.apim_service1.id
 
   proxy {
-    host_name    = var.gatewayHostname
-    key_vault_id = azurerm_key_vault_certificate.gatewayCert.secret_id
+    host_name = var.gatewayHostname
+
+    key_vault_id = azurerm_key_vault_certificate.gatewayCertSelf.secret_id
   }
 
   developer_portal {
     host_name    = var.portalHostname
-    key_vault_id = azurerm_key_vault_certificate.gatewayCert.secret_id
+    key_vault_id = azurerm_key_vault_certificate.gatewayCertSelf.secret_id
   }
   management {
     host_name    = var.managementHostname
-    key_vault_id = azurerm_key_vault_certificate.gatewayCert.secret_id
+    key_vault_id = azurerm_key_vault_certificate.gatewayCertSelf.secret_id
   }
 }
 
