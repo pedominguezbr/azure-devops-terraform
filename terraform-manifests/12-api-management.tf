@@ -9,7 +9,7 @@ resource "azurerm_api_management" "apim_service1" {
   publisher_email     = "publisher@example.com"
   sku_name            = "Developer_1"
 
-  virtual_network_type = "Internal"
+  virtual_network_type = "External" #Internal
   virtual_network_configuration {
     subnet_id = azurerm_subnet.apim-default.id
   }
@@ -35,22 +35,22 @@ XML
 }
 
 resource "azurerm_key_vault_access_policy" "key_vault_access_policy" {
-  key_vault_id = azurerm_key_vault.infra_keyvault.id
+  key_vault_id = azurerm_key_vault.infra_keyvault.id #data.azurerm_key_vault.Keyvault_it.id
   tenant_id    = azurerm_api_management.apim_service1.identity.0.tenant_id
   object_id    = azurerm_api_management.apim_service1.identity.0.principal_id
 
   certificate_permissions = [
-    "get",
-    "list",
+    "Get",
+    "List",
   ]
   key_permissions = [
-    "get",
-    "list",
+    "Get",
+    "List",
   ]
 
   secret_permissions = [
-    "get",
-    "list",
+    "Get",
+    "List",
   ]
 }
 
@@ -70,8 +70,7 @@ resource "azurerm_api_management_custom_domain" "customdomain" {
   api_management_id = azurerm_api_management.apim_service1.id
 
   proxy {
-    host_name = var.gatewayHostname
-
+    host_name    = var.gatewayHostname
     key_vault_id = azurerm_key_vault_certificate.gatewayCertSelf.secret_id
   }
 
@@ -81,7 +80,7 @@ resource "azurerm_api_management_custom_domain" "customdomain" {
   }
   management {
     host_name    = var.managementHostname
-    key_vault_id = azurerm_key_vault_certificate.gatewayCertSelf.secret_id
+    key_vault_id = azurerm_key_vault_certificate.gatewayCertSelf.secret_id #data.azurerm_key_vault_certificate.gatewayCert.secret_id
   }
 }
 

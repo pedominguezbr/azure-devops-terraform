@@ -10,51 +10,51 @@ resource "azurerm_key_vault" "infra_keyvault" {
     object_id = data.azurerm_client_config.current.object_id
 
     certificate_permissions = [
-      "create",
-      "delete",
-      "deleteissuers",
-      "get",
-      "getissuers",
-      "import",
-      "list",
-      "purge",
-      "recover",
-      "restore",
-      "listissuers",
-      "managecontacts",
-      "manageissuers",
-      "setissuers",
-      "update",
+      "Create",
+      "Delete",
+      "DeleteIssuers",
+      "Get",
+      "GetIssuers",
+      "Import",
+      "List",
+      "Purge",
+      "Recover",
+      "Restore",
+      "ListIssuers",
+      "ManageContacts",
+      "ManageIssuers",
+      "SetIssuers",
+      "Update",
     ]
 
     key_permissions = [
-      "backup",
-      "create",
-      "decrypt",
-      "delete",
-      "encrypt",
-      "get",
-      "import",
-      "list",
-      "purge",
-      "recover",
-      "restore",
-      "sign",
-      "unwrapKey",
-      "update",
-      "verify",
-      "wrapKey",
+      "Backup",
+      "Create",
+      "Decrypt",
+      "Delete",
+      "Encrypt",
+      "Get",
+      "Import",
+      "List",
+      "Purge",
+      "Recover",
+      "Restore",
+      "Sign",
+      "UnwrapKey",
+      "Update",
+      "Verify",
+      "WrapKey",
     ]
 
     secret_permissions = [
-      "backup",
-      "delete",
-      "get",
-      "list",
-      "purge",
-      "recover",
-      "restore",
-      "set",
+      "Backup",
+      "Delete",
+      "Get",
+      "List",
+      "Purge",
+      "Recover",
+      "Restore",
+      "Set",
       "Purge",
     ]
   }
@@ -95,6 +95,10 @@ resource "azurerm_key_vault_certificate" "gatewayCertSelf" {
   name         = "gatewayCert-Self"
   key_vault_id = azurerm_key_vault.infra_keyvault.id
 
+  tags = {
+    "prueba" = "1"
+  }
+
   certificate_policy {
     issuer_parameters {
       name = "Self"
@@ -131,15 +135,16 @@ resource "azurerm_key_vault_certificate" "gatewayCertSelf" {
         "keyEncipherment",
       ]
 
-      subject            = "CN=api.pdominguez.com"
+      subject            = "CN=devapi.pdominguez.com"
       validity_in_months = 12
 
       subject_alternative_names {
         dns_names = [
-          "api.pdominguez.com",
-          "portal.pdominguez.com",
-          "devmanagement.pdominguez.com",
-          "rancher.pdominguez.com",
+          "devapi.pdominguez.com",
+          "devportal.pdominguez.com",
+          "devdevmanagement.pdominguez.com",
+          "devrancher.pdominguez.com",
+          "devappgw.pdominguez.com",
         ]
       }
     }
