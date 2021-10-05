@@ -142,7 +142,7 @@ resource "azurerm_key_vault_certificate" "gatewayCertSelf" {
         dns_names = [
           "devapi.pdominguez.com",
           "devportal.pdominguez.com",
-          "devdevmanagement.pdominguez.com",
+          "devmanagement.pdominguez.com",
           "devrancher.pdominguez.com",
           "devappgw.pdominguez.com",
         ]

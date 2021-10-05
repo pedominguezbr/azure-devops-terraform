@@ -17,6 +17,13 @@ variable "resource_group_name" {
   default     = "terraform-aks"
 }
 
+variable "zones" {
+  description = "A collection of availability zones to spread the Application Gateway over."
+  type        = list(string)
+  default     = [] #[1, 2, 3]
+}
+
+
 # Azure AKS Environment Name
 variable "environment" {
   type        = string
@@ -47,6 +54,56 @@ variable "windows_admin_password" {
   description = "This variable defines the Windows admin password k8s Worker nodes"
 }
 
+variable "waf_configuration" {
+  description = "Configuration block for WAF."
+  type = object({
+    firewall_mode            = string
+    rule_set_type            = string
+    rule_set_version         = string
+    file_upload_limit_mb     = number
+    max_request_body_size_kb = number
+  })
+  default = null
+}
+
+#Capacity Autoscaling appgw
+variable "capacity" {
+  description = "Min and max capacity for auto scaling"
+  type = object({
+    min = number
+    max = number
+  })
+  default = null
+}
+
+# My Domain
+variable "GeneralDomain" {
+  type        = string
+  default     = "pdominguez.com"
+  description = "API gateway host"
+}
+
+# Api SubDomain
+variable "ApiSubDomain" {
+  type        = string
+  default     = "devapi"
+  description = "API SubDomain."
+}
+
+# Portal SubDomain
+variable "PortalSubDomain" {
+  type        = string
+  default     = "devportal"
+  description = "Portal SubDomain."
+}
+
+# Management  SubDomain
+variable "ManagementSubDomain" {
+  type        = string
+  default     = "devmanagement"
+  description = "Management SubDomain."
+}
+
 # API gateway host
 variable "gatewayHostname" {
   type        = string
@@ -64,7 +121,7 @@ variable "portalHostname" {
 # API management endpoint host
 variable "managementHostname" {
   type        = string
-  default     = "devdevmanagement.pdominguez.com"
+  default     = "devmanagement.pdominguez.com"
   description = "API management endpoint host"
 }
 
@@ -89,7 +146,7 @@ variable "gatewayCertPfxPassword" {
 
 ## full path to contoso.net trusted root .cer file
 variable "trustedRootCertCerPath" {
-  default     = "~/certificados/gatewayCert-Self.cer" #Comentado para Pipeline, empty sin pass 
+  default     = "~/certificados/gatewayCert-Self.cer" #Comentado para Pipeline, empty sin pass  "C:\\certificacion\\gatewayCert-Self.cer" #default
   description = "full path to contoso.net trusted root .cer file"
 }
 
