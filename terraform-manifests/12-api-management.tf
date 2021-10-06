@@ -34,10 +34,12 @@ XML
   }
 }
 
-resource "azurerm_key_vault_access_policy" "key_vault_access_policy" {
+resource "azurerm_key_vault_access_policy" "key_vault_access_policy_apim" {
   key_vault_id = azurerm_key_vault.infra_keyvault.id #data.azurerm_key_vault.Keyvault_it.id
   tenant_id    = azurerm_api_management.apim_service1.identity.0.tenant_id
   object_id    = azurerm_api_management.apim_service1.identity.0.principal_id
+
+  storage_permissions = []
 
   certificate_permissions = [
     "Get",

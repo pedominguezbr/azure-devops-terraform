@@ -1,6 +1,20 @@
 # azure-devops-terraform
 infra Azure 
 
+## Step-08: VERY IMPORTANT FIX: Provide Permission to create Azure AD Groups
+- Provide permission for Service connection created in previous step to create Azure AD Groups
+- Go to -> Azure DevOps -> Select Organization -> Select project **terraform-azure-aks**
+- Go to **Project Settings** -> Pipelines -> Service Connections 
+- Open **terraform-aks-azurerm-svc-con**
+- Click on **Manage Service Principal**, new tab will be opened 
+- Click on **View API Permissions**
+- Click on **Add Permission**
+- Select an API: Microsoft APIs
+- Commonly used Microsoft APIs: Supported legacy APIs: Azure Active Directory Graph
+- Click on **Application Permissions**
+- Check **Directory.ReadWrite.All** and click on **Add Permission**
+- Click on **Grant Admin consent for Default Directory**
+
 ## Generar Service principal para conexion y obtener token para eliminar 
 ```
 # Generar Service principal para conexion via oauth2/token

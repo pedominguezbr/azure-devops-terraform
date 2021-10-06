@@ -58,6 +58,49 @@ resource "azurerm_key_vault" "infra_keyvault" {
       "Purge",
     ]
   }
+
+  #Access policy to appgw
+  access_policy {
+    tenant_id = data.azurerm_client_config.current.tenant_id
+    object_id = azurerm_user_assigned_identity.useridentityappgw.principal_id
+
+    storage_permissions = []
+    certificate_permissions = [
+      "Get",
+      "List",
+    ]
+    key_permissions = [
+      "Get",
+      "List",
+    ]
+
+    secret_permissions = [
+      "Get",
+      "List",
+    ]
+  }
+
+  #Access policy to apim
+  access_policy {
+    tenant_id = azurerm_api_management.apim_service1.identity.0.tenant_id
+    object_id = azurerm_api_management.apim_service1.identity.0.principal_id
+
+    storage_permissions = []
+
+    certificate_permissions = [
+      "Get",
+      "List",
+    ]
+    key_permissions = [
+      "Get",
+      "List",
+    ]
+
+    secret_permissions = [
+      "Get",
+      "List",
+    ]
+  }
 }
 
 /*

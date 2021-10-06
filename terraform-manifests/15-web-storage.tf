@@ -8,9 +8,12 @@ resource "azurerm_storage_account" "webstorage" {
   account_replication_type  = "LRS" #GRS
   enable_https_traffic_only = true
   min_tls_version           = "TLS1_0"
+
   static_website {
     index_document = "index.html"
   }
+
+  allow_blob_public_access = true
 
   tags = {
     "environment" = var.environment

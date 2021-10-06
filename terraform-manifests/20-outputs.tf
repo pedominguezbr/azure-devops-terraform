@@ -103,3 +103,10 @@ output "apim_service1_product_group_ids" {
   value       = azurerm_api_management_product_group.product_group.id
 }
 
+output "access_policy_key_permissions_apim" {
+  value = azurerm_key_vault_access_policy.key_vault_access_policy_apim.certificate_permissions
+}
+
+output "access_policy_key_permissions_appgw" {
+  value = azurerm_key_vault_access_policy.key_vault_access_policy_appgw.certificate_permissions
+}
