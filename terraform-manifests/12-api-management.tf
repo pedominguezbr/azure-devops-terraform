@@ -9,7 +9,7 @@ resource "azurerm_api_management" "apim_service1" {
   publisher_email     = "publisher@example.com"
   sku_name            = "Developer_1"
 
-  virtual_network_type = "Internal" #Internal #External
+  virtual_network_type = "External" #Internal #External #None
   virtual_network_configuration {
     subnet_id = azurerm_subnet.apim-default.id
   }

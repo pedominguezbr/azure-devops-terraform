@@ -1,0 +1,2 @@
+/terraform-manifests/*.hcl
+/terraform-manifests/.terraform
